@@ -4,22 +4,26 @@ import {Button} from 'react-bootstrap'
 import './App.css';
 import SimpleCard from "./SimpleCard";
 import StarShipForm from "./StarShipForm";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchAllShips} from "./store/actions";
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 
 function App() {
-  const [starships, setStarships] = useState([])
+  //const [starships, setStarships] = useState([])
   const [showFormModal, setShowFormModal] = useState(false)
   const [newStarship, setNewStarship] = useState({})
+  const dispatch = useDispatch()
+  const starships = useSelector(state => state.starships)
 
-  const getAllStarShips = async () => {
+  /*const getAllStarShips = async () => {
     const { data: starships } = await axios.get('http://localhost:3000/starships')
     setStarships(starships)
-  }
+  }*/
 
   useEffect(() => {
 
-    getAllStarShips()
+    dispatch(fetchAllShips())
   },[])
 
   const checkForm = () => newStarship.name && newStarship.manufacturer && newStarship.image && newStarship.crew >= 0 && newStarship.passengers >= 0 && newStarship.cargo_capacity >= 0
@@ -35,7 +39,6 @@ function App() {
 
   const addNewStarShip = async e => {
     e.preventDefault()
-    console.log(newStarship, 'newstarship')
     if(checkForm()) {
       await axios.post('http://localhost:3000/starships', newStarship)
       await getAllStarShips()

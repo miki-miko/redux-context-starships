@@ -6,7 +6,6 @@ export default ({onInputChange, addPost, show, handleClose}) => {
 
     const checkAndAddStarship = async e => {
         setValidate(true)
-        console.log('called')
         try {
             await addPost(e)
             setValidate(false)
