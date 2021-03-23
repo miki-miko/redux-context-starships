@@ -35,7 +35,6 @@ function App() {
 
   const addNewStarShip = async e => {
     e.preventDefault()
-    console.log(newStarship, 'newstarship')
     if(checkForm()) {
       await axios.post('http://localhost:3000/starships', newStarship)
       await getAllStarShips()
