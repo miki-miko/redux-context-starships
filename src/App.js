@@ -1,28 +1,23 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {Button} from 'react-bootstrap'
 import './App.css';
 import SimpleCard from "./SimpleCard";
 import StarShipForm from "./StarShipForm";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchAllShips} from "./store/actions";
+import {addShip, fetchAllShips} from "./store/actions";
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 
 function App() {
-  //const [starships, setStarships] = useState([])
   const [showFormModal, setShowFormModal] = useState(false)
   const [newStarship, setNewStarship] = useState({})
   const dispatch = useDispatch()
   const starships = useSelector(state => state.starships)
 
-  /*const getAllStarShips = async () => {
-    const { data: starships } = await axios.get('http://localhost:3000/starships')
-    setStarships(starships)
-  }*/
+
 
   useEffect(() => {
-
     dispatch(fetchAllShips())
   },[])
 
@@ -40,8 +35,7 @@ function App() {
   const addNewStarShip = async e => {
     e.preventDefault()
     if(checkForm()) {
-      await axios.post('http://localhost:3000/starships', newStarship)
-      await getAllStarShips()
+      dispatch(addShip(newStarship))
     } else {
       throw new Error ('Form not Valid')
     }
@@ -52,7 +46,7 @@ function App() {
 
   return (
       <div className={"App"}>
-        <div className={"PostsContainer"}>{starships.map(starship => (<SimpleCard fetchAll={getAllStarShips} starship={starship} key={starship.id}/>))}</div>
+        <div className={"PostsContainer"}>{starships.map(starship => (<SimpleCard starship={starship} key={starship.id}/>))}</div>
         <StarShipForm starship={newStarship} show={showFormModal} handleClose={closeForm} onInputChange={onInputChange} addPost={addNewStarShip}/>
         <Button className={'addButton'} size={'lg'} variant={'primary'} onClick={() => setShowFormModal(true)}> + </Button>
       </div>

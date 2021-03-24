@@ -1,21 +1,16 @@
 import {Button, Card} from 'react-bootstrap'
 import {useState} from 'react'
 import SimpleCardDetail from "./SimpleCardDetail";
-import axios from 'axios'
+import {useDispatch} from "react-redux";
+import {deleteShip} from "./store/actions";
 
 
-export default ({starship, fetchAll}) => {
+export default ({starship}) => {
     const [open, setOpen] = useState(false)
+    const dispatch = useDispatch()
 
     const deleteStarship = async () => {
-        try {
-            const res = await axios.delete(`http://localhost:3000/starships/${starship.id}`)
-            if(res.status !== 200) throw new Error('Delete Failed')
-            fetchAll()
-        }
-        catch (e) {
-            alert(e)
-        }
+        dispatch(deleteShip(starship.id))
     }
 
     return (
